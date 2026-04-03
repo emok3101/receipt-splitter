@@ -16,19 +16,11 @@
     --muted: #6b7280;
     --hint: #3d4250;
     --accent: #f5c842;
-    --green: #4ade80;
-    --blue: #60a5fa;
-    --pink: #f472b6;
-    --purple: #818cf8;
-    --orange: #fb923c;
-    --teal: #34d399;
-    --yellow: #facc15;
     --red: #f87171;
     --warn-bg: rgba(251,191,36,0.12);
     --warn-col: #fbbf24;
-    --info-bg: rgba(167,139,250,0.12);
-    --info-col: #a78bfa;
-    --success-bg: rgba(74,222,128,0.12);
+    --info-bg: rgba(96,165,250,0.08);
+    --info-col: #60a5fa;
     --success-col: #4ade80;
     --danger-col: #f87171;
   }
@@ -45,288 +37,97 @@
     align-items: center;
   }
 
-  #app {
-    width: 100%;
-    max-width: 560px;
-    padding: 28px 16px 60px;
-  }
+  #app { width: 100%; max-width: 560px; padding: 28px 16px 60px; }
 
-  /* ── Header ── */
-  header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.1rem;
-    color: var(--accent);
-    letter-spacing: -0.5px;
-  }
-  header p {
-    font-size: 0.68rem;
-    color: var(--muted);
-    margin-top: 5px;
-    letter-spacing: 0.07em;
-  }
+  header { text-align: center; margin-bottom: 32px; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: 2.1rem; color: var(--accent); letter-spacing: -0.5px; }
+  header p { font-size: 0.68rem; color: var(--muted); margin-top: 5px; letter-spacing: 0.07em; }
 
-  /* ── Screens ── */
   .screen { display: none; }
   .screen.active { display: block; }
 
-  /* ── API Key notice ── */
-  .api-notice {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 20px;
-    font-size: 0.7rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
+  /* API notice */
+  .api-notice { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; font-size: 0.7rem; color: var(--muted); line-height: 1.6; }
   .api-notice strong { color: var(--accent); }
   .api-key-row { display: flex; gap: 8px; margin-top: 10px; }
-  .api-key-row input {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--text);
-    outline: none;
-  }
+  .api-key-row input { flex: 1; background: var(--bg); border: 1px solid var(--border2); border-radius: 8px; padding: 8px 12px; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text); outline: none; }
   .api-key-row input:focus { border-color: var(--accent); }
-  .api-key-row button {
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 500;
-    cursor: pointer;
-  }
+  .api-key-row button { background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 8px 14px; font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 500; cursor: pointer; }
 
-  /* ── Drop zone ── */
-  .drop-zone {
-    border: 1.5px dashed var(--border2);
-    border-radius: 12px;
-    padding: 2.5rem 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-    background: var(--surface);
-    position: relative;
-  }
-  .drop-zone:hover, .drop-zone.dragover {
-    background: var(--surface2);
-    border-color: var(--accent);
-  }
+  /* Drop zone */
+  .drop-zone { border: 1.5px dashed var(--border2); border-radius: 12px; padding: 2.5rem 1.5rem; text-align: center; cursor: pointer; transition: background 0.15s, border-color 0.15s; background: var(--surface); position: relative; }
+  .drop-zone:hover, .drop-zone.dragover { background: var(--surface2); border-color: var(--accent); }
   .drop-zone input[type=file] { display: none; }
   .drop-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
   .drop-title { font-size: 0.88rem; font-weight: 500; color: var(--text); margin-bottom: 6px; }
   .drop-sub { font-size: 0.7rem; color: var(--muted); margin-bottom: 18px; }
   .drop-or { font-size: 0.65rem; color: var(--hint); margin: 14px 0; letter-spacing: 0.08em; }
 
-  textarea#paste-area {
-    width: 100%;
-    min-height: 90px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    color: var(--text);
-    resize: vertical;
-    outline: none;
-    transition: border-color 0.12s;
-  }
-  textarea#paste-area:focus { border-color: var(--border2); }
+  textarea#paste-area { width: 100%; min-height: 90px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text); resize: vertical; outline: none; }
   textarea#paste-area::placeholder { color: var(--hint); }
 
-  /* ── Names ── */
-  .names-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 18px;
-  }
-  .name-wrap { flex: 1; }
-  .name-wrap label {
-    font-size: 0.62rem;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 5px;
-  }
-  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; }
-  .name-wrap input {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 7px 10px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.12s;
-  }
-  .name-wrap input:focus { border-color: var(--border2); }
+  /* People section on upload screen */
+  .people-section { margin-top: 18px; }
+  .people-section-label { font-size: 0.62rem; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+  .people-grid { display: flex; flex-direction: column; gap: 6px; }
+  .person-row { display: flex; align-items: center; gap: 8px; }
+  .person-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .person-row input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text); outline: none; }
+  .person-row input:focus { border-color: var(--border2); }
+  .remove-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 2px 6px; border-radius: 4px; line-height: 1; }
+  .remove-btn:hover { color: var(--red); }
+  .add-person-btn { margin-top: 8px; background: transparent; border: 1px dashed var(--border2); border-radius: 8px; padding: 7px; width: 100%; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); cursor: pointer; transition: all 0.12s; }
+  .add-person-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ── Primary button ── */
-  .btn-primary {
-    width: 100%;
-    margin-top: 14px;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 10px;
-    padding: 13px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.12s;
-    letter-spacing: 0.03em;
-  }
+  .btn-primary { width: 100%; margin-top: 14px; background: var(--accent); color: #000; border: none; border-radius: 10px; padding: 13px; font-family: 'DM Mono', monospace; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: opacity 0.12s; letter-spacing: 0.03em; }
   .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
   .btn-primary:hover:not(:disabled) { opacity: 0.88; }
 
-  .file-btn {
-    display: inline-block;
-    background: transparent;
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 8px 18px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--text);
-    cursor: pointer;
-    transition: border-color 0.12s;
-  }
+  .file-btn { display: inline-block; background: transparent; border: 1px solid var(--border2); border-radius: 8px; padding: 8px 18px; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text); cursor: pointer; transition: border-color 0.12s; }
   .file-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ── Checksum ── */
-  .checksum {
-    border-radius: 10px;
-    padding: 11px 14px;
-    margin-bottom: 14px;
-    font-size: 0.72rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    border: 1px solid;
-  }
-  .checksum.ok   { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.25); color: var(--green); }
+  .error-box { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.25); border-radius: 8px; padding: 11px 14px; font-size: 0.72rem; color: var(--red); margin-top: 12px; line-height: 1.6; }
+
+  /* Checksum */
+  .checksum { border-radius: 10px; padding: 11px 14px; margin-bottom: 14px; font-size: 0.72rem; display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid; }
+  .checksum.ok   { background: rgba(74,222,128,0.08);  border-color: rgba(74,222,128,0.25);  color: var(--success-col); }
   .checksum.warn { background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.25); color: var(--red); }
-  .checksum.info { background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.25); color: var(--blue); }
-  .checksum-label { opacity: 0.75; }
-  .checksum-nums { font-weight: 500; text-align: right; line-height: 1.6; }
+  .checksum.info { background: var(--info-bg); border-color: rgba(96,165,250,0.25); color: var(--info-col); }
+  .checksum-label { opacity: 0.85; }
+  .checksum-nums { font-weight: 500; text-align: right; line-height: 1.6; white-space: nowrap; }
 
-  /* ── Receipt total input ── */
-  .total-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-  }
+  /* Receipt total */
+  .total-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; }
   .total-row label { font-size: 0.68rem; color: var(--muted); white-space: nowrap; }
-  .total-row input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: var(--accent);
-    text-align: right;
-    width: 80px;
-  }
+  .total-row input { flex: 1; background: transparent; border: none; outline: none; font-family: 'DM Mono', monospace; font-size: 0.88rem; font-weight: 500; color: var(--accent); text-align: right; }
   .total-row span { font-size: 0.88rem; color: var(--accent); font-weight: 500; }
-    background: rgba(248,113,113,0.1);
-    border: 1px solid rgba(248,113,113,0.25);
-    border-radius: 8px;
-    padding: 11px 14px;
-    font-size: 0.72rem;
-    color: var(--red);
-    margin-top: 12px;
-    line-height: 1.6;
-  }
 
-  /* ── Loading ── */
-  #loading-screen {
-    text-align: center;
-    padding: 5rem 1rem;
-  }
-  .spinner {
-    width: 36px; height: 36px;
-    border: 2px solid var(--border2);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.75s linear infinite;
-    margin: 0 auto 18px;
-  }
+  /* Loading */
+  #loading-screen { text-align: center; padding: 5rem 1rem; }
+  .spinner { width: 36px; height: 36px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.75s linear infinite; margin: 0 auto 18px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-msg { font-size: 0.78rem; color: var(--muted); }
 
-  /* ── Results ── */
-  .back-btn {
-    background: none; border: none; cursor: pointer;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem; color: var(--muted);
-    padding: 0; margin-bottom: 16px;
-    text-decoration: underline;
-  }
+  /* Results */
+  .back-btn { background: none; border: none; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); padding: 0; margin-bottom: 16px; text-decoration: underline; }
   .back-btn:hover { color: var(--text); }
 
-  .store-header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .store-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    color: var(--accent);
-  }
+  .store-header { text-align: center; margin-bottom: 18px; }
+  .store-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--accent); }
   .store-date { font-size: 0.65rem; color: var(--muted); margin-top: 3px; }
 
-  .names-bar { display: flex; gap: 7px; margin-bottom: 18px; flex-wrap: wrap; }
-  .name-chip {
-    display: flex; align-items: center; gap: 5px;
-    border-radius: 20px; padding: 4px 11px 4px 8px;
-    font-size: 0.68rem; border: 1px solid; background: transparent;
-  }
-  .name-chip input {
-    background: transparent; border: none; outline: none;
-    color: inherit; font-family: 'DM Mono', monospace;
-    font-size: 0.68rem; width: 62px;
-  }
+  /* Names bar on results */
+  .names-bar { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .name-chip { display: flex; align-items: center; gap: 5px; border-radius: 20px; padding: 4px 10px 4px 8px; font-size: 0.68rem; border: 1px solid; background: transparent; }
+  .name-chip input { background: transparent; border: none; outline: none; color: inherit; font-family: 'DM Mono', monospace; font-size: 0.68rem; width: 62px; }
+  .name-chip .chip-remove { background: none; border: none; color: inherit; cursor: pointer; opacity: 0.5; font-size: 0.75rem; padding: 0 0 0 2px; line-height: 1; }
+  .name-chip .chip-remove:hover { opacity: 1; }
+  .add-chip-btn { border-radius: 20px; padding: 4px 10px; font-size: 0.68rem; border: 1px dashed var(--border2); background: transparent; color: var(--muted); cursor: pointer; font-family: 'DM Mono', monospace; }
+  .add-chip-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-  .section-label {
-    font-size: 0.58rem; letter-spacing: 0.13em;
-    text-transform: uppercase; color: var(--muted);
-    margin: 18px 0 7px; padding-left: 2px;
-  }
+  .section-label { font-size: 0.58rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); margin: 18px 0 7px; padding-left: 2px; }
 
-  .item-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 11px 13px;
-    margin-bottom: 7px;
-    transition: border-color 0.1s;
-  }
+  .item-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; margin-bottom: 7px; }
   .item-card.assigned { border-color: #252a38; }
 
   .item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
@@ -335,13 +136,9 @@
   .item-subqty { font-size: 0.63rem; color: var(--muted); font-style: italic; margin-top: 2px; }
 
   .badge-row { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
-  .badge {
-    font-size: 0.58rem; padding: 2px 7px;
-    border-radius: 20px; font-weight: 500;
-    white-space: nowrap; letter-spacing: 0.02em;
-  }
-  .badge.disc  { background: var(--warn-bg);    color: var(--warn-col);    border: 1px solid rgba(251,191,36,0.25); }
-  .badge.joe   { background: var(--info-bg);    color: var(--info-col);    border: 1px solid rgba(167,139,250,0.25); }
+  .badge { font-size: 0.58rem; padding: 2px 7px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
+  .badge.disc { background: var(--warn-bg); color: var(--warn-col); border: 1px solid rgba(251,191,36,0.25); }
+  .badge.joe  { background: var(--info-bg); color: var(--info-col); border: 1px solid rgba(96,165,250,0.25); }
 
   .item-price-col { text-align: right; flex-shrink: 0; }
   .price-original { font-size: 0.63rem; color: var(--muted); text-decoration: line-through; display: block; }
@@ -349,32 +146,16 @@
   .price-final.disc { color: var(--success-col); }
 
   .toggle-row { display: flex; gap: 5px; flex-wrap: wrap; }
-  .toggle-btn {
-    padding: 3px 9px; border-radius: 20px;
-    border: 1px solid var(--border); background: transparent;
-    color: var(--muted); font-family: 'DM Mono', monospace;
-    font-size: 0.62rem; cursor: pointer; white-space: nowrap;
-    transition: all 0.1s;
-  }
+  .toggle-btn { padding: 3px 9px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.62rem; cursor: pointer; white-space: nowrap; transition: all 0.1s; }
   .toggle-btn:hover { border-color: var(--border2); color: var(--text); }
   .toggle-btn.sel { border-width: 1.5px; font-weight: 500; }
 
-  /* ── Summary bar ── */
-  .summary-bar {
-    position: sticky; bottom: 0;
-    background: linear-gradient(to top, var(--bg) 85%, transparent);
-    padding: 20px 0 0;
-    margin-top: 20px;
-  }
-  .summary-grid { display: flex; gap: 8px; }
-  .sum-chip {
-    flex: 1; background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px; padding: 10px 10px;
-    text-align: center;
-  }
-  .sum-label { font-size: 0.6rem; color: var(--muted); display: block; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .sum-amount { font-size: 1.05rem; font-weight: 500; }
+  /* Summary bar */
+  .summary-bar { position: sticky; bottom: 0; background: linear-gradient(to top, var(--bg) 85%, transparent); padding: 20px 0 0; margin-top: 20px; }
+  .summary-grid { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sum-chip { flex: 1; min-width: 70px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 8px; text-align: center; }
+  .sum-label { font-size: 0.58rem; color: var(--muted); display: block; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sum-amount { font-size: 1rem; font-weight: 500; }
   .warn-text { font-size: 0.62rem; color: var(--red); text-align: center; margin-top: 7px; }
 </style>
 </head>
@@ -386,12 +167,11 @@
     <p>POWERED BY GEMINI 2.5 PRO · FREE · SPLIT ANY RECEIPT INSTANTLY</p>
   </header>
 
-  <!-- ── Upload screen ── -->
+  <!-- Upload screen -->
   <div id="upload-screen" class="screen active">
-
     <div class="api-notice">
-      <strong>One-time setup:</strong> this app uses Google Gemini — completely free, no credit card needed.
-      Get a free API key at <strong>aistudio.google.com</strong> → "Get API key". Saved locally on your device only.
+      <strong>One-time setup:</strong> uses Google Gemini — completely free, no credit card needed.
+      Get a free API key at <strong>aistudio.google.com</strong> → "Get API key".
       <div class="api-key-row">
         <input type="password" id="api-key-input" placeholder="AIza..." autocomplete="off">
         <button onclick="saveKey()">Save</button>
@@ -409,32 +189,27 @@
       <textarea id="paste-area" placeholder="Paste raw receipt text here..."></textarea>
     </div>
 
-    <div class="names-row">
-      <div class="name-wrap">
-        <label><span class="dot" style="background:#4ade80"></span>Person 1</label>
-        <input type="text" id="name-me" value="Me" maxlength="12">
+    <!-- People -->
+    <div class="people-section">
+      <div class="people-section-label">
+        <span>Who's splitting?</span>
+        <span id="people-count-label" style="color:var(--hint)"></span>
       </div>
-      <div class="name-wrap">
-        <label><span class="dot" style="background:#60a5fa"></span>Person 2</label>
-        <input type="text" id="name-f1" value="Friend 1" maxlength="12">
-      </div>
-      <div class="name-wrap">
-        <label><span class="dot" style="background:#f472b6"></span>Person 3</label>
-        <input type="text" id="name-f2" value="Friend 2" maxlength="12">
-      </div>
+      <div class="people-grid" id="people-grid"></div>
+      <button class="add-person-btn" id="add-person-btn" onclick="addPerson()">+ Add person</button>
     </div>
 
-    <button class="btn-primary" id="analyse-btn" onclick="analyseReceipt()">Analyse receipt</button>
+    <button class="btn-primary" onclick="analyseReceipt()">Analyse receipt</button>
     <div id="upload-error"></div>
   </div>
 
-  <!-- ── Loading screen ── -->
+  <!-- Loading screen -->
   <div id="loading-screen" class="screen">
     <div class="spinner"></div>
     <div class="loading-msg" id="loading-msg">Reading your receipt...</div>
   </div>
 
-  <!-- ── Results screen ── -->
+  <!-- Results screen -->
   <div id="results-screen" class="screen">
     <button class="back-btn" onclick="goBack()">← New receipt</button>
     <div class="store-header">
@@ -442,82 +217,104 @@
       <div class="store-date" id="store-date"></div>
     </div>
 
-    <!-- Receipt total (editable for checksum) -->
     <div class="total-row">
       <label>Receipt total</label>
       <span>€</span>
       <input type="number" id="receipt-total" step="0.01" min="0" placeholder="0.00" oninput="updateSummary()">
     </div>
 
-    <!-- Checksum -->
     <div class="checksum info" id="checksum">
-      <span class="checksum-label">Enter receipt total above to verify</span>
+      <span class="checksum-label">Enter receipt total above to verify AI accuracy</span>
       <span class="checksum-nums" id="checksum-nums"></span>
     </div>
 
     <div class="names-bar" id="names-bar"></div>
     <div id="items-container"></div>
+
     <div class="summary-bar">
-      <div class="summary-grid">
-        <div class="sum-chip">
-          <span class="sum-label" id="sum-name-me">Me</span>
-          <span class="sum-amount" id="sum-me" style="color:var(--green)">€0.00</span>
-        </div>
-        <div class="sum-chip">
-          <span class="sum-label" id="sum-name-f1">Friend 1</span>
-          <span class="sum-amount" id="sum-f1" style="color:var(--blue)">€0.00</span>
-        </div>
-        <div class="sum-chip">
-          <span class="sum-label" id="sum-name-f2">Friend 2</span>
-          <span class="sum-amount" id="sum-f2" style="color:var(--pink)">€0.00</span>
-        </div>
-      </div>
+      <div class="summary-grid" id="summary-grid"></div>
       <div class="warn-text" id="warn"></div>
     </div>
   </div>
 
 </div>
-
 <script>
-// ── State ────────────────────────────────────────────────────────────────────
-let items = [], assignments = [];
-let names = { me: 'Me', f1: 'Friend 1', f2: 'Friend 2' };
-let fileData = null, fileType = null;
+// ── People colours (up to 8) ─────────────────────────────────────────────────
+const COLOURS = [
+  '#4ade80','#60a5fa','#f472b6','#fb923c','#818cf8','#34d399','#facc15','#f87171'
+];
 
-// ── API Key ──────────────────────────────────────────────────────────────────
+// ── People state ─────────────────────────────────────────────────────────────
+let people = [
+  { id: 0, name: 'Me' },
+  { id: 1, name: 'Friend 1' },
+  { id: 2, name: 'Friend 2' },
+];
+let nextId = 3;
+
+function colourFor(index) { return COLOURS[index % COLOURS.length]; }
+
+// ── Upload screen people management ──────────────────────────────────────────
+function renderPeopleGrid() {
+  const grid = document.getElementById('people-grid');
+  grid.innerHTML = '';
+  people.forEach((p, idx) => {
+    const col = colourFor(idx);
+    const row = document.createElement('div');
+    row.className = 'person-row';
+    row.innerHTML = `
+      <span class="person-dot" style="background:${col}"></span>
+      <input type="text" value="${p.name}" maxlength="14" placeholder="Name"
+        oninput="people[${idx}].name = this.value.trim() || 'Person ${idx+1}'">
+      ${people.length > 2 ? `<button class="remove-btn" onclick="removePerson(${p.id})" title="Remove">×</button>` : ''}
+    `;
+    grid.appendChild(row);
+  });
+  document.getElementById('add-person-btn').style.display = people.length >= 8 ? 'none' : 'block';
+  document.getElementById('people-count-label').textContent = `${people.length} people`;
+}
+
+function addPerson() {
+  if (people.length >= 8) return;
+  people.push({ id: nextId++, name: `Friend ${people.length}` });
+  renderPeopleGrid();
+}
+
+function removePerson(id) {
+  if (people.length <= 2) return;
+  people = people.filter(p => p.id !== id);
+  renderPeopleGrid();
+}
+
+renderPeopleGrid();
+
+// ── API Key ───────────────────────────────────────────────────────────────────
 function saveKey() {
   const val = document.getElementById('api-key-input').value.trim();
   if (val.length < 10) {
-    document.getElementById('key-status').textContent = '⚠ Key looks too short';
-    document.getElementById('key-status').style.color = 'var(--red)';
-    return;
+    setKeyStatus('⚠ Key looks too short', 'var(--red)'); return;
   }
   localStorage.setItem('gemini_key', val);
-  document.getElementById('key-status').textContent = '✓ Key saved';
-  document.getElementById('key-status').style.color = 'var(--green)';
+  setKeyStatus('✓ Key saved', 'var(--success-col)');
 }
-
 function getKey() { return localStorage.getItem('gemini_key') || ''; }
-
+function setKeyStatus(msg, col) {
+  const el = document.getElementById('key-status');
+  el.textContent = msg; el.style.color = col;
+}
 window.addEventListener('load', () => {
   const saved = getKey();
-  if (saved) {
-    document.getElementById('api-key-input').value = saved;
-    document.getElementById('key-status').textContent = '✓ Key loaded';
-    document.getElementById('key-status').style.color = 'var(--green)';
-  }
+  if (saved) { document.getElementById('api-key-input').value = saved; setKeyStatus('✓ Key loaded', 'var(--success-col)'); }
 });
 
-// ── Drag & drop ──────────────────────────────────────────────────────────────
+// ── File handling ─────────────────────────────────────────────────────────────
+let fileData = null, fileType = null;
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 
 dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-dropZone.addEventListener('drop', e => {
-  e.preventDefault(); dropZone.classList.remove('dragover');
-  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-});
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
 fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
 
 function handleFile(file) {
@@ -531,11 +328,8 @@ function handleFile(file) {
   reader.readAsDataURL(file);
 }
 
-// ── Screens ──────────────────────────────────────────────────────────────────
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
+// ── Screens ───────────────────────────────────────────────────────────────────
+function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
 function goBack() {
   fileData = null; fileType = null; items = []; assignments = [];
@@ -544,31 +338,27 @@ function goBack() {
   document.getElementById('drop-sub').textContent = 'Photo (JPG/PNG), PDF, or screenshot';
   document.getElementById('paste-area').value = '';
   document.getElementById('upload-error').innerHTML = '';
+  renderPeopleGrid();
   showScreen('upload-screen');
 }
 
-// ── Analyse ──────────────────────────────────────────────────────────────────
+// ── Receipt data ──────────────────────────────────────────────────────────────
+let items = [], assignments = [];
+
+// ── Analyse ───────────────────────────────────────────────────────────────────
 async function analyseReceipt() {
   const pasteText = document.getElementById('paste-area').value.trim();
   const apiKey = getKey();
+  if (!apiKey) { document.getElementById('upload-error').innerHTML = '<div class="error-box">Please enter and save your Gemini API key first. Get one free at aistudio.google.com.</div>'; return; }
+  if (!fileData && !pasteText) { document.getElementById('upload-error').innerHTML = '<div class="error-box">Please upload a receipt file or paste receipt text.</div>'; return; }
 
-  if (!apiKey) {
-    document.getElementById('upload-error').innerHTML = '<div class="error-box">Please enter and save your Gemini API key first. Get one free at aistudio.google.com.</div>';
-    return;
-  }
-  if (!fileData && !pasteText) {
-    document.getElementById('upload-error').innerHTML = '<div class="error-box">Please upload a receipt file or paste receipt text.</div>';
-    return;
-  }
-
-  names.me = document.getElementById('name-me').value.trim() || 'Me';
-  names.f1 = document.getElementById('name-f1').value.trim() || 'Friend 1';
-  names.f2 = document.getElementById('name-f2').value.trim() || 'Friend 2';
+  // Snapshot people from upload screen inputs
+  document.querySelectorAll('#people-grid input').forEach((inp, idx) => { if (people[idx]) people[idx].name = inp.value.trim() || `Person ${idx+1}`; });
 
   showScreen('loading-screen');
   document.getElementById('loading-msg').textContent = 'Reading your receipt...';
 
-  const PROMPT = `You are a receipt parser. Extract all purchased items and return ONLY valid JSON — no markdown fences, no explanation, no extra text.
+  const PROMPT = `You are a receipt parser. Extract all purchased items and return ONLY valid JSON — no markdown fences, no explanation.
 
 Return exactly this structure:
 {
@@ -579,7 +369,7 @@ Return exactly this structure:
   "items": [
     {
       "name": "item name",
-      "qty_note": "e.g. 2 × €1.49 or 0.992 kg × €2.29 or empty string",
+      "qty_note": "e.g. 2 × €1.49 or empty string",
       "receipt_price": 2.99,
       "discount_type": null,
       "discount_label": null,
@@ -590,20 +380,19 @@ Return exactly this structure:
 }
 
 Rules:
-- receipt_total = the final amount paid as printed on the receipt (after all discounts)
-- receipt_price = the printed full price for that line (before any line-level discount)
-- discount_type = null if no item-level discount, otherwise a short label e.g. "Extrem Aktion", "Nimm Mehr", "Aktion", "Rabatt"
-- discount_label = human-readable saving e.g. "−€0.66" or "−25%" or null
+- receipt_total = the final amount paid on the receipt (after all discounts)
+- receipt_price = printed full price before any line-level discount
+- discount_type = null if no item-level discount, otherwise e.g. "Extrem Aktion", "Nimm Mehr", "Aktion"
+- discount_label = e.g. "−€0.66" or null
 - final_price = price after item-level discounts only
-- basket_discount_rate = a decimal like 0.10 if there is a basket-wide % discount (e.g. jö Rabattsammler 10%); else 0
-- For items WITH no item-level discount: if basket_discount_rate > 0, reduce final_price by that rate
+- basket_discount_rate = decimal like 0.10 for a basket-wide % discount; else 0
+- For items with NO item-level discount: if basket_discount_rate > 0, reduce final_price by that rate
 - For items WITH an item-level discount: do NOT apply the basket discount
 - List duplicate items as separate entries
-- Ignore subtotal, total, tax, and discount summary lines — only purchasable items
+- Ignore subtotal, total, tax lines — purchasable items only
 
 Parse this receipt.`;
 
-  // Build Gemini parts array
   const parts = [];
   if (pasteText) {
     parts.push({ text: PROMPT + '\n\nReceipt text:\n' + pasteText });
@@ -614,89 +403,94 @@ Parse this receipt.`;
 
   try {
     document.getElementById('loading-msg').textContent = 'Identifying items and discounts...';
-
-    const model = 'gemini-2.5-pro';
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`;
     const resp = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts }],
-        generationConfig: { temperature: 0, maxOutputTokens: 2048 }
-      })
+      body: JSON.stringify({ contents: [{ parts }], generationConfig: { temperature: 0, maxOutputTokens: 2048 } })
     });
-
     const data = await resp.json();
     if (data.error) throw new Error(data.error.message);
-
     const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
+    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
 
     items = parsed.items;
     assignments = new Array(items.length).fill(null);
 
     document.getElementById('store-name').textContent = parsed.store || 'Receipt';
     document.getElementById('store-date').textContent = parsed.date || '';
-
-    // Pre-fill receipt total if parsed
-    if (parsed.receipt_total) {
-      document.getElementById('receipt-total').value = parsed.receipt_total.toFixed(2);
-    }
+    if (parsed.receipt_total) document.getElementById('receipt-total').value = parsed.receipt_total.toFixed(2);
 
     renderResults();
     showScreen('results-screen');
-
   } catch (err) {
     showScreen('upload-screen');
-    document.getElementById('upload-error').innerHTML =
-      `<div class="error-box">Could not parse receipt: ${err.message}<br>Try pasting the receipt text instead.</div>`;
+    document.getElementById('upload-error').innerHTML = `<div class="error-box">Could not parse receipt: ${err.message}<br>Try pasting the receipt text instead.</div>`;
   }
 }
 
 // ── Split logic ───────────────────────────────────────────────────────────────
-const OPTS = [
-  { key: 'me',    col: '#4ade80', lbl: () => names.me },
-  { key: 'f1',    col: '#60a5fa', lbl: () => names.f1 },
-  { key: 'f2',    col: '#f472b6', lbl: () => names.f2 },
-  { key: 'me-f1', col: '#818cf8', lbl: () => names.me + '+' + names.f1 },
-  { key: 'f1-f2', col: '#fb923c', lbl: () => names.f1 + '+' + names.f2 },
-  { key: 'me-f2', col: '#34d399', lbl: () => names.me + '+' + names.f2 },
-  { key: 'all',   col: '#facc15', lbl: () => 'All 3' },
-];
-
-function splitFor(key, price) {
-  const n = key === 'all' ? 3 : key.includes('-') ? 2 : 1;
-  const s = price / n, r = { me: 0, f1: 0, f2: 0 };
-  if (key === 'me'    || key === 'me-f1' || key === 'me-f2' || key === 'all') r.me  = s;
-  if (key === 'f1'    || key === 'me-f1' || key === 'f1-f2' || key === 'all') r.f1  = s;
-  if (key === 'f2'    || key === 'me-f2' || key === 'f1-f2' || key === 'all') r.f2  = s;
-  return r;
+function splitFor(assignment, price) {
+  // assignment is either a person id (number) or an array of person ids
+  const ids = Array.isArray(assignment) ? assignment : [assignment];
+  const share = price / ids.length;
+  const result = {};
+  people.forEach(p => result[p.id] = 0);
+  ids.forEach(id => { if (result[id] !== undefined) result[id] = share; });
+  return result;
 }
 
+// ── Generate toggle options dynamically ───────────────────────────────────────
+function getOpts() {
+  const opts = [];
+  // Individual
+  people.forEach((p, i) => opts.push({ key: `p${p.id}`, ids: [p.id], col: colourFor(i), label: p.name }));
+  // Pairs (only if ≤ 5 people, otherwise too many combos)
+  if (people.length <= 5) {
+    for (let a = 0; a < people.length; a++) {
+      for (let b = a + 1; b < people.length; b++) {
+        const pa = people[a], pb = people[b];
+        opts.push({ key: `p${pa.id}-p${pb.id}`, ids: [pa.id, pb.id], col: colourFor(a), label: `${pa.name}+${pb.name}` });
+      }
+    }
+  }
+  // All
+  opts.push({ key: 'all', ids: people.map(p => p.id), col: '#facc15', label: `All ${people.length}` });
+  return opts;
+}
+
+// ── Update summary ────────────────────────────────────────────────────────────
 function updateSummary() {
-  let tot = { me: 0, f1: 0, f2: 0 }, unassigned = 0, parsedTotal = 0;
+  const totals = {};
+  people.forEach(p => totals[p.id] = 0);
+  let unassigned = 0, parsedTotal = 0;
+
   items.forEach((item, i) => {
     parsedTotal += item.final_price;
-    if (!assignments[i]) { unassigned += item.final_price; return; }
-    const s = splitFor(assignments[i], item.final_price);
-    tot.me += s.me; tot.f1 += s.f1; tot.f2 += s.f2;
+    if (assignments[i] === null) { unassigned += item.final_price; return; }
+    const shares = splitFor(assignments[i], item.final_price);
+    people.forEach(p => { totals[p.id] += shares[p.id] || 0; });
   });
-  ['me', 'f1', 'f2'].forEach(w => {
-    document.getElementById('sum-name-' + w).textContent = names[w];
-    document.getElementById('sum-' + w).textContent = '€' + tot[w].toFixed(2);
+
+  // Summary chips
+  const sg = document.getElementById('summary-grid');
+  sg.innerHTML = '';
+  people.forEach((p, i) => {
+    const col = colourFor(i);
+    const chip = document.createElement('div');
+    chip.className = 'sum-chip';
+    chip.style.borderColor = col;
+    chip.innerHTML = `<span class="sum-label">${p.name}</span><span class="sum-amount" style="color:${col}">€${totals[p.id].toFixed(2)}</span>`;
+    sg.appendChild(chip);
   });
-  document.getElementById('warn').textContent =
-    unassigned > 0.005 ? '€' + unassigned.toFixed(2) + ' still unassigned' : '';
+
+  document.getElementById('warn').textContent = unassigned > 0.005 ? `€${unassigned.toFixed(2)} still unassigned` : '';
 
   // Checksum
   const cs = document.getElementById('checksum');
   const csNums = document.getElementById('checksum-nums');
-  const receiptTotalInput = document.getElementById('receipt-total');
-  const receiptTotal = parseFloat(receiptTotalInput?.value);
-
-  if (!receiptTotalInput || isNaN(receiptTotal) || receiptTotal === 0) {
+  const receiptTotal = parseFloat(document.getElementById('receipt-total')?.value);
+  if (isNaN(receiptTotal) || receiptTotal === 0) {
     cs.className = 'checksum info';
     cs.querySelector('.checksum-label').textContent = 'Enter the receipt total above to verify AI accuracy';
     csNums.textContent = `Items sum: €${parsedTotal.toFixed(2)}`;
@@ -714,39 +508,67 @@ function updateSummary() {
   }
 }
 
-// ── Render ───────────────────────────────────────────────────────────────────
+// ── Render results ────────────────────────────────────────────────────────────
 function renderResults() {
-  // Names bar
+  renderNamesBar();
+  renderItems();
+  updateSummary();
+}
+
+function renderNamesBar() {
   const nb = document.getElementById('names-bar');
   nb.innerHTML = '';
-  [['me','#4ade80'],['f1','#60a5fa'],['f2','#f472b6']].forEach(([w, col]) => {
+  people.forEach((p, i) => {
+    const col = colourFor(i);
     const chip = document.createElement('div');
     chip.className = 'name-chip';
     chip.style.borderColor = col; chip.style.color = col;
-    chip.innerHTML = `<span style="font-size:13px">👤</span><input id="nr-${w}" maxlength="12" value="${names[w]}" style="color:${col}">`;
+    chip.innerHTML = `
+      <span style="font-size:12px">👤</span>
+      <input maxlength="14" value="${p.name}" style="color:${col}" oninput="people[${i}].name=this.value.trim()||'Person ${i+1}';renderItems();updateSummary();">
+      ${people.length > 2 ? `<button class="chip-remove" onclick="removePersonResults(${p.id})">×</button>` : ''}
+    `;
     nb.appendChild(chip);
-    chip.querySelector('input').addEventListener('input', e => {
-      names[w] = e.target.value.trim() || w;
-      renderItems(); updateSummary();
-    });
   });
-  renderItems();
-  updateSummary();
+  // Add person button
+  if (people.length < 8) {
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-chip-btn';
+    addBtn.textContent = '+ Add';
+    addBtn.onclick = () => { addPerson(); renderResults(); };
+    nb.appendChild(addBtn);
+  }
+}
+
+function removePersonResults(id) {
+  if (people.length <= 2) return;
+  people = people.filter(p => p.id !== id);
+  // Clear assignments that referenced this person
+  assignments = assignments.map(a => {
+    if (a === null) return null;
+    if (Array.isArray(a)) {
+      const filtered = a.filter(pid => pid !== id);
+      return filtered.length === 0 ? null : filtered.length === 1 ? filtered[0] : filtered;
+    }
+    return a === id ? null : a;
+  });
+  renderResults();
 }
 
 function renderItems() {
   const c = document.getElementById('items-container');
   c.innerHTML = '';
+  const opts = getOpts();
+
   items.forEach((item, i) => {
     const isDisc = item.discount_type !== null;
     const showOrig = Math.abs(item.receipt_price - item.final_price) > 0.005;
-
     const card = document.createElement('div');
-    card.className = 'item-card' + (assignments[i] ? ' assigned' : '');
+    card.className = 'item-card' + (assignments[i] !== null ? ' assigned' : '');
 
     const badgeHtml = isDisc
       ? `<span class="badge disc">${item.discount_type}${item.discount_label ? ' ' + item.discount_label : ''}</span>`
-      : (item.receipt_price !== item.final_price ? `<span class="badge joe">discount applied</span>` : '');
+      : (showOrig ? `<span class="badge joe">discount applied</span>` : '');
 
     card.innerHTML = `
       <div class="item-top">
@@ -764,17 +586,16 @@ function renderItems() {
     c.appendChild(card);
 
     const row = card.querySelector(`#tr-${i}`);
-    OPTS.forEach(opt => {
+    opts.forEach(opt => {
       const btn = document.createElement('button');
-      btn.className = 'toggle-btn' + (assignments[i] === opt.key ? ' sel' : '');
-      btn.textContent = opt.lbl();
-      if (assignments[i] === opt.key) {
-        btn.style.borderColor = opt.col;
-        btn.style.color = opt.col;
-        btn.style.background = opt.col + '14';
-      }
+      const isSel = JSON.stringify(assignments[i]) === JSON.stringify(opt.ids.length === 1 ? opt.ids[0] : opt.ids) ||
+                    (opt.key === 'all' && Array.isArray(assignments[i]) && assignments[i].length === people.length);
+      btn.className = 'toggle-btn' + (isSel ? ' sel' : '');
+      btn.textContent = opt.label;
+      if (isSel) { btn.style.borderColor = opt.col; btn.style.color = opt.col; btn.style.background = opt.col + '14'; }
       btn.addEventListener('click', () => {
-        assignments[i] = assignments[i] === opt.key ? null : opt.key;
+        const val = opt.ids.length === 1 ? opt.ids[0] : opt.ids;
+        assignments[i] = JSON.stringify(assignments[i]) === JSON.stringify(val) ? null : val;
         renderItems(); updateSummary();
       });
       row.appendChild(btn);

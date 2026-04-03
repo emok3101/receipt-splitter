@@ -412,7 +412,11 @@ Parse this receipt.`;
     const data = await resp.json();
     if (data.error) throw new Error(data.error.message);
     const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    // Robustly extract JSON even if Gemini adds surrounding text
+    const jsonStart = raw.indexOf('{');
+    const jsonEnd = raw.lastIndexOf('}');
+    if (jsonStart === -1 || jsonEnd === -1) throw new Error('No JSON found in response');
+    const parsed = JSON.parse(raw.slice(jsonStart, jsonEnd + 1));
 
     items = parsed.items;
     assignments = new Array(items.length).fill(null);

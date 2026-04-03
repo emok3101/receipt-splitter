@@ -407,7 +407,7 @@ Parse this receipt.`;
     const resp = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts }], generationConfig: { temperature: 0, maxOutputTokens: 2048 } })
+      body: JSON.stringify({ contents: [{ parts }], generationConfig: { temperature: 0, maxOutputTokens: 8192 } })
     });
     const data = await resp.json();
     if (data.error) throw new Error(data.error.message);

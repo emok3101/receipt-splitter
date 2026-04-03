@@ -164,7 +164,7 @@
 
   <header>
     <h1>Receipt Splitter</h1>
-    <p>POWERED BY GEMINI 2.5 PRO · FREE · SPLIT ANY RECEIPT INSTANTLY</p>
+    <p>POWERED BY GEMINI 2.5 FLASH · FREE · SPLIT ANY RECEIPT INSTANTLY</p>
   </header>
 
   <!-- Upload screen -->
@@ -403,7 +403,7 @@ Parse this receipt.`;
 
   try {
     document.getElementById('loading-msg').textContent = 'Identifying items and discounts...';
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     const resp = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

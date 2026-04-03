@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Receipt Splitter — Free</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f11;
+    --surface: #16181c;
+    --surface2: #1e2026;
+    --border: #2a2d35;
+    --border2: #383c47;
+    --text: #e8e9ec;
+    --muted: #6b7280;
+    --hint: #3d4250;
+    --accent: #f5c842;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --pink: #f472b6;
+    --purple: #818cf8;
+    --orange: #fb923c;
+    --teal: #34d399;
+    --yellow: #facc15;
+    --red: #f87171;
+    --warn-bg: rgba(251,191,36,0.12);
+    --warn-col: #fbbf24;
+    --info-bg: rgba(167,139,250,0.12);
+    --info-col: #a78bfa;
+    --success-bg: rgba(74,222,128,0.12);
+    --success-col: #4ade80;
+    --danger-col: #f87171;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #app {
+    width: 100%;
+    max-width: 560px;
+    padding: 28px 16px 60px;
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.1rem;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  header p {
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 5px;
+    letter-spacing: 0.07em;
+  }
+
+  /* ── Screens ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── API Key notice ── */
+  .api-notice {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .api-notice strong { color: var(--accent); }
+  .api-key-row { display: flex; gap: 8px; margin-top: 10px; }
+  .api-key-row input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text);
+    outline: none;
+  }
+  .api-key-row input:focus { border-color: var(--accent); }
+  .api-key-row button {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* ── Drop zone ── */
+  .drop-zone {
+    border: 1.5px dashed var(--border2);
+    border-radius: 12px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    background: var(--surface);
+    position: relative;
+  }
+  .drop-zone:hover, .drop-zone.dragover {
+    background: var(--surface2);
+    border-color: var(--accent);
+  }
+  .drop-zone input[type=file] { display: none; }
+  .drop-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+  .drop-title { font-size: 0.88rem; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  .drop-sub { font-size: 0.7rem; color: var(--muted); margin-bottom: 18px; }
+  .drop-or { font-size: 0.65rem; color: var(--hint); margin: 14px 0; letter-spacing: 0.08em; }
+
+  textarea#paste-area {
+    width: 100%;
+    min-height: 90px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.12s;
+  }
+  textarea#paste-area:focus { border-color: var(--border2); }
+  textarea#paste-area::placeholder { color: var(--hint); }
+
+  /* ── Names ── */
+  .names-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .name-wrap { flex: 1; }
+  .name-wrap label {
+    font-size: 0.62rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; }
+  .name-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.12s;
+  }
+  .name-wrap input:focus { border-color: var(--border2); }
+
+  /* ── Primary button ── */
+  .btn-primary {
+    width: 100%;
+    margin-top: 14px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.12s;
+    letter-spacing: 0.03em;
+  }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-primary:hover:not(:disabled) { opacity: 0.88; }
+
+  .file-btn {
+    display: inline-block;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.12s;
+  }
+  .file-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Checksum ── */
+  .checksum {
+    border-radius: 10px;
+    padding: 11px 14px;
+    margin-bottom: 14px;
+    font-size: 0.72rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid;
+  }
+  .checksum.ok   { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.25); color: var(--green); }
+  .checksum.warn { background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.25); color: var(--red); }
+  .checksum.info { background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.25); color: var(--blue); }
+  .checksum-label { opacity: 0.75; }
+  .checksum-nums { font-weight: 500; text-align: right; line-height: 1.6; }
+
+  /* ── Receipt total input ── */
+  .total-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  .total-row label { font-size: 0.68rem; color: var(--muted); white-space: nowrap; }
+  .total-row input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-align: right;
+    width: 80px;
+  }
+  .total-row span { font-size: 0.88rem; color: var(--accent); font-weight: 500; }
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.25);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 0.72rem;
+    color: var(--red);
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+
+  /* ── Loading ── */
+  #loading-screen {
+    text-align: center;
+    padding: 5rem 1rem;
+  }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+    margin: 0 auto 18px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-msg { font-size: 0.78rem; color: var(--muted); }
+
+  /* ── Results ── */
+  .back-btn {
+    background: none; border: none; cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem; color: var(--muted);
+    padding: 0; margin-bottom: 16px;
+    text-decoration: underline;
+  }
+  .back-btn:hover { color: var(--text); }
+
+  .store-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .store-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+  }
+  .store-date { font-size: 0.65rem; color: var(--muted); margin-top: 3px; }
+
+  .names-bar { display: flex; gap: 7px; margin-bottom: 18px; flex-wrap: wrap; }
+  .name-chip {
+    display: flex; align-items: center; gap: 5px;
+    border-radius: 20px; padding: 4px 11px 4px 8px;
+    font-size: 0.68rem; border: 1px solid; background: transparent;
+  }
+  .name-chip input {
+    background: transparent; border: none; outline: none;
+    color: inherit; font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; width: 62px;
+  }
+
+  .section-label {
+    font-size: 0.58rem; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--muted);
+    margin: 18px 0 7px; padding-left: 2px;
+  }
+
+  .item-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 13px;
+    margin-bottom: 7px;
+    transition: border-color 0.1s;
+  }
+  .item-card.assigned { border-color: #252a38; }
+
+  .item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
+  .item-left { flex: 1; }
+  .item-name { font-size: 0.76rem; color: var(--text); line-height: 1.45; }
+  .item-subqty { font-size: 0.63rem; color: var(--muted); font-style: italic; margin-top: 2px; }
+
+  .badge-row { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+  .badge {
+    font-size: 0.58rem; padding: 2px 7px;
+    border-radius: 20px; font-weight: 500;
+    white-space: nowrap; letter-spacing: 0.02em;
+  }
+  .badge.disc  { background: var(--warn-bg);    color: var(--warn-col);    border: 1px solid rgba(251,191,36,0.25); }
+  .badge.joe   { background: var(--info-bg);    color: var(--info-col);    border: 1px solid rgba(167,139,250,0.25); }
+
+  .item-price-col { text-align: right; flex-shrink: 0; }
+  .price-original { font-size: 0.63rem; color: var(--muted); text-decoration: line-through; display: block; }
+  .price-final { font-size: 0.9rem; font-weight: 500; color: var(--accent); }
+  .price-final.disc { color: var(--success-col); }
+
+  .toggle-row { display: flex; gap: 5px; flex-wrap: wrap; }
+  .toggle-btn {
+    padding: 3px 9px; border-radius: 20px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--muted); font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; cursor: pointer; white-space: nowrap;
+    transition: all 0.1s;
+  }
+  .toggle-btn:hover { border-color: var(--border2); color: var(--text); }
+  .toggle-btn.sel { border-width: 1.5px; font-weight: 500; }
+
+  /* ── Summary bar ── */
+  .summary-bar {
+    position: sticky; bottom: 0;
+    background: linear-gradient(to top, var(--bg) 85%, transparent);
+    padding: 20px 0 0;
+    margin-top: 20px;
+  }
+  .summary-grid { display: flex; gap: 8px; }
+  .sum-chip {
+    flex: 1; background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 10px;
+    text-align: center;
+  }
+  .sum-label { font-size: 0.6rem; color: var(--muted); display: block; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sum-amount { font-size: 1.05rem; font-weight: 500; }
+  .warn-text { font-size: 0.62rem; color: var(--red); text-align: center; margin-top: 7px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <h1>Receipt Splitter</h1>
+    <p>POWERED BY GEMINI 2.5 PRO · FREE · SPLIT ANY RECEIPT INSTANTLY</p>
+  </header>
+
+  <!-- ── Upload screen ── -->
+  <div id="upload-screen" class="screen active">
+
+    <div class="api-notice">
+      <strong>One-time setup:</strong> this app uses Google Gemini — completely free, no credit card needed.
+      Get a free API key at <strong>aistudio.google.com</strong> → "Get API key". Saved locally on your device only.
+      <div class="api-key-row">
+        <input type="password" id="api-key-input" placeholder="AIza..." autocomplete="off">
+        <button onclick="saveKey()">Save</button>
+      </div>
+      <div id="key-status" style="margin-top:6px;font-size:0.65rem;color:var(--muted);"></div>
+    </div>
+
+    <div class="drop-zone" id="drop-zone">
+      <span class="drop-icon">🧾</span>
+      <div class="drop-title" id="drop-title">Drop your receipt here</div>
+      <div class="drop-sub" id="drop-sub">Photo (JPG/PNG), PDF, or screenshot</div>
+      <input type="file" id="file-input" accept="image/*,.pdf">
+      <span class="file-btn" onclick="document.getElementById('file-input').click()">Choose file</span>
+      <div class="drop-or">— or paste receipt text —</div>
+      <textarea id="paste-area" placeholder="Paste raw receipt text here..."></textarea>
+    </div>
+
+    <div class="names-row">
+      <div class="name-wrap">
+        <label><span class="dot" style="background:#4ade80"></span>Person 1</label>
+        <input type="text" id="name-me" value="Me" maxlength="12">
+      </div>
+      <div class="name-wrap">
+        <label><span class="dot" style="background:#60a5fa"></span>Person 2</label>
+        <input type="text" id="name-f1" value="Friend 1" maxlength="12">
+      </div>
+      <div class="name-wrap">
+        <label><span class="dot" style="background:#f472b6"></span>Person 3</label>
+        <input type="text" id="name-f2" value="Friend 2" maxlength="12">
+      </div>
+    </div>
+
+    <button class="btn-primary" id="analyse-btn" onclick="analyseReceipt()">Analyse receipt</button>
+    <div id="upload-error"></div>
+  </div>
+
+  <!-- ── Loading screen ── -->
+  <div id="loading-screen" class="screen">
+    <div class="spinner"></div>
+    <div class="loading-msg" id="loading-msg">Reading your receipt...</div>
+  </div>
+
+  <!-- ── Results screen ── -->
+  <div id="results-screen" class="screen">
+    <button class="back-btn" onclick="goBack()">← New receipt</button>
+    <div class="store-header">
+      <div class="store-name" id="store-name"></div>
+      <div class="store-date" id="store-date"></div>
+    </div>
+
+    <!-- Receipt total (editable for checksum) -->
+    <div class="total-row">
+      <label>Receipt total</label>
+      <span>€</span>
+      <input type="number" id="receipt-total" step="0.01" min="0" placeholder="0.00" oninput="updateSummary()">
+    </div>
+
+    <!-- Checksum -->
+    <div class="checksum info" id="checksum">
+      <span class="checksum-label">Enter receipt total above to verify</span>
+      <span class="checksum-nums" id="checksum-nums"></span>
+    </div>
+
+    <div class="names-bar" id="names-bar"></div>
+    <div id="items-container"></div>
+    <div class="summary-bar">
+      <div class="summary-grid">
+        <div class="sum-chip">
+          <span class="sum-label" id="sum-name-me">Me</span>
+          <span class="sum-amount" id="sum-me" style="color:var(--green)">€0.00</span>
+        </div>
+        <div class="sum-chip">
+          <span class="sum-label" id="sum-name-f1">Friend 1</span>
+          <span class="sum-amount" id="sum-f1" style="color:var(--blue)">€0.00</span>
+        </div>
+        <div class="sum-chip">
+          <span class="sum-label" id="sum-name-f2">Friend 2</span>
+          <span class="sum-amount" id="sum-f2" style="color:var(--pink)">€0.00</span>
+        </div>
+      </div>
+      <div class="warn-text" id="warn"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────────
+let items = [], assignments = [];
+let names = { me: 'Me', f1: 'Friend 1', f2: 'Friend 2' };
+let fileData = null, fileType = null;
+
+// ── API Key ──────────────────────────────────────────────────────────────────
+function saveKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  if (val.length < 10) {
+    document.getElementById('key-status').textContent = '⚠ Key looks too short';
+    document.getElementById('key-status').style.color = 'var(--red)';
+    return;
+  }
+  localStorage.setItem('gemini_key', val);
+  document.getElementById('key-status').textContent = '✓ Key saved';
+  document.getElementById('key-status').style.color = 'var(--green)';
+}
+
+function getKey() { return localStorage.getItem('gemini_key') || ''; }
+
+window.addEventListener('load', () => {
+  const saved = getKey();
+  if (saved) {
+    document.getElementById('api-key-input').value = saved;
+    document.getElementById('key-status').textContent = '✓ Key loaded';
+    document.getElementById('key-status').style.color = 'var(--green)';
+  }
+});
+
+// ── Drag & drop ──────────────────────────────────────────────────────────────
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    fileData = e.target.result.split(',')[1];
+    fileType = file.type || 'image/jpeg';
+    document.getElementById('drop-title').textContent = '✓ ' + file.name;
+    document.getElementById('drop-sub').textContent = (file.size / 1024).toFixed(0) + ' KB · ready';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Screens ──────────────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goBack() {
+  fileData = null; fileType = null; items = []; assignments = [];
+  fileInput.value = '';
+  document.getElementById('drop-title').textContent = 'Drop your receipt here';
+  document.getElementById('drop-sub').textContent = 'Photo (JPG/PNG), PDF, or screenshot';
+  document.getElementById('paste-area').value = '';
+  document.getElementById('upload-error').innerHTML = '';
+  showScreen('upload-screen');
+}
+
+// ── Analyse ──────────────────────────────────────────────────────────────────
+async function analyseReceipt() {
+  const pasteText = document.getElementById('paste-area').value.trim();
+  const apiKey = getKey();
+
+  if (!apiKey) {
+    document.getElementById('upload-error').innerHTML = '<div class="error-box">Please enter and save your Gemini API key first. Get one free at aistudio.google.com.</div>';
+    return;
+  }
+  if (!fileData && !pasteText) {
+    document.getElementById('upload-error').innerHTML = '<div class="error-box">Please upload a receipt file or paste receipt text.</div>';
+    return;
+  }
+
+  names.me = document.getElementById('name-me').value.trim() || 'Me';
+  names.f1 = document.getElementById('name-f1').value.trim() || 'Friend 1';
+  names.f2 = document.getElementById('name-f2').value.trim() || 'Friend 2';
+
+  showScreen('loading-screen');
+  document.getElementById('loading-msg').textContent = 'Reading your receipt...';
+
+  const PROMPT = `You are a receipt parser. Extract all purchased items and return ONLY valid JSON — no markdown fences, no explanation, no extra text.
+
+Return exactly this structure:
+{
+  "store": "store name",
+  "date": "date string or empty",
+  "currency": "€",
+  "receipt_total": 96.34,
+  "items": [
+    {
+      "name": "item name",
+      "qty_note": "e.g. 2 × €1.49 or 0.992 kg × €2.29 or empty string",
+      "receipt_price": 2.99,
+      "discount_type": null,
+      "discount_label": null,
+      "final_price": 2.99
+    }
+  ],
+  "basket_discount_rate": 0.10
+}
+
+Rules:
+- receipt_total = the final amount paid as printed on the receipt (after all discounts)
+- receipt_price = the printed full price for that line (before any line-level discount)
+- discount_type = null if no item-level discount, otherwise a short label e.g. "Extrem Aktion", "Nimm Mehr", "Aktion", "Rabatt"
+- discount_label = human-readable saving e.g. "−€0.66" or "−25%" or null
+- final_price = price after item-level discounts only
+- basket_discount_rate = a decimal like 0.10 if there is a basket-wide % discount (e.g. jö Rabattsammler 10%); else 0
+- For items WITH no item-level discount: if basket_discount_rate > 0, reduce final_price by that rate
+- For items WITH an item-level discount: do NOT apply the basket discount
+- List duplicate items as separate entries
+- Ignore subtotal, total, tax, and discount summary lines — only purchasable items
+
+Parse this receipt.`;
+
+  // Build Gemini parts array
+  const parts = [];
+  if (pasteText) {
+    parts.push({ text: PROMPT + '\n\nReceipt text:\n' + pasteText });
+  } else {
+    parts.push({ text: PROMPT });
+    parts.push({ inline_data: { mime_type: fileType || 'image/jpeg', data: fileData } });
+  }
+
+  try {
+    document.getElementById('loading-msg').textContent = 'Identifying items and discounts...';
+
+    const model = 'gemini-2.5-pro';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts }],
+        generationConfig: { temperature: 0, maxOutputTokens: 2048 }
+      })
+    });
+
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    items = parsed.items;
+    assignments = new Array(items.length).fill(null);
+
+    document.getElementById('store-name').textContent = parsed.store || 'Receipt';
+    document.getElementById('store-date').textContent = parsed.date || '';
+
+    // Pre-fill receipt total if parsed
+    if (parsed.receipt_total) {
+      document.getElementById('receipt-total').value = parsed.receipt_total.toFixed(2);
+    }
+
+    renderResults();
+    showScreen('results-screen');
+
+  } catch (err) {
+    showScreen('upload-screen');
+    document.getElementById('upload-error').innerHTML =
+      `<div class="error-box">Could not parse receipt: ${err.message}<br>Try pasting the receipt text instead.</div>`;
+  }
+}
+
+// ── Split logic ───────────────────────────────────────────────────────────────
+const OPTS = [
+  { key: 'me',    col: '#4ade80', lbl: () => names.me },
+  { key: 'f1',    col: '#60a5fa', lbl: () => names.f1 },
+  { key: 'f2',    col: '#f472b6', lbl: () => names.f2 },
+  { key: 'me-f1', col: '#818cf8', lbl: () => names.me + '+' + names.f1 },
+  { key: 'f1-f2', col: '#fb923c', lbl: () => names.f1 + '+' + names.f2 },
+  { key: 'me-f2', col: '#34d399', lbl: () => names.me + '+' + names.f2 },
+  { key: 'all',   col: '#facc15', lbl: () => 'All 3' },
+];
+
+function splitFor(key, price) {
+  const n = key === 'all' ? 3 : key.includes('-') ? 2 : 1;
+  const s = price / n, r = { me: 0, f1: 0, f2: 0 };
+  if (key === 'me'    || key === 'me-f1' || key === 'me-f2' || key === 'all') r.me  = s;
+  if (key === 'f1'    || key === 'me-f1' || key === 'f1-f2' || key === 'all') r.f1  = s;
+  if (key === 'f2'    || key === 'me-f2' || key === 'f1-f2' || key === 'all') r.f2  = s;
+  return r;
+}
+
+function updateSummary() {
+  let tot = { me: 0, f1: 0, f2: 0 }, unassigned = 0, parsedTotal = 0;
+  items.forEach((item, i) => {
+    parsedTotal += item.final_price;
+    if (!assignments[i]) { unassigned += item.final_price; return; }
+    const s = splitFor(assignments[i], item.final_price);
+    tot.me += s.me; tot.f1 += s.f1; tot.f2 += s.f2;
+  });
+  ['me', 'f1', 'f2'].forEach(w => {
+    document.getElementById('sum-name-' + w).textContent = names[w];
+    document.getElementById('sum-' + w).textContent = '€' + tot[w].toFixed(2);
+  });
+  document.getElementById('warn').textContent =
+    unassigned > 0.005 ? '€' + unassigned.toFixed(2) + ' still unassigned' : '';
+
+  // Checksum
+  const cs = document.getElementById('checksum');
+  const csNums = document.getElementById('checksum-nums');
+  const receiptTotalInput = document.getElementById('receipt-total');
+  const receiptTotal = parseFloat(receiptTotalInput?.value);
+
+  if (!receiptTotalInput || isNaN(receiptTotal) || receiptTotal === 0) {
+    cs.className = 'checksum info';
+    cs.querySelector('.checksum-label').textContent = 'Enter the receipt total above to verify AI accuracy';
+    csNums.textContent = `Items sum: €${parsedTotal.toFixed(2)}`;
+  } else {
+    const diff = Math.abs(parsedTotal - receiptTotal);
+    if (diff < 0.02) {
+      cs.className = 'checksum ok';
+      cs.querySelector('.checksum-label').textContent = '✓ AI total matches receipt — looks correct';
+      csNums.textContent = `€${parsedTotal.toFixed(2)} = €${receiptTotal.toFixed(2)}`;
+    } else {
+      cs.className = 'checksum warn';
+      cs.querySelector('.checksum-label').textContent = `⚠ Mismatch of €${diff.toFixed(2)} — check items carefully`;
+      csNums.textContent = `AI: €${parsedTotal.toFixed(2)} vs €${receiptTotal.toFixed(2)}`;
+    }
+  }
+}
+
+// ── Render ───────────────────────────────────────────────────────────────────
+function renderResults() {
+  // Names bar
+  const nb = document.getElementById('names-bar');
+  nb.innerHTML = '';
+  [['me','#4ade80'],['f1','#60a5fa'],['f2','#f472b6']].forEach(([w, col]) => {
+    const chip = document.createElement('div');
+    chip.className = 'name-chip';
+    chip.style.borderColor = col; chip.style.color = col;
+    chip.innerHTML = `<span style="font-size:13px">👤</span><input id="nr-${w}" maxlength="12" value="${names[w]}" style="color:${col}">`;
+    nb.appendChild(chip);
+    chip.querySelector('input').addEventListener('input', e => {
+      names[w] = e.target.value.trim() || w;
+      renderItems(); updateSummary();
+    });
+  });
+  renderItems();
+  updateSummary();
+}
+
+function renderItems() {
+  const c = document.getElementById('items-container');
+  c.innerHTML = '';
+  items.forEach((item, i) => {
+    const isDisc = item.discount_type !== null;
+    const showOrig = Math.abs(item.receipt_price - item.final_price) > 0.005;
+
+    const card = document.createElement('div');
+    card.className = 'item-card' + (assignments[i] ? ' assigned' : '');
+
+    const badgeHtml = isDisc
+      ? `<span class="badge disc">${item.discount_type}${item.discount_label ? ' ' + item.discount_label : ''}</span>`
+      : (item.receipt_price !== item.final_price ? `<span class="badge joe">discount applied</span>` : '');
+
+    card.innerHTML = `
+      <div class="item-top">
+        <div class="item-left">
+          <div class="item-name">${item.name}</div>
+          ${item.qty_note ? `<div class="item-subqty">${item.qty_note}</div>` : ''}
+          <div class="badge-row">${badgeHtml}</div>
+        </div>
+        <div class="item-price-col">
+          ${showOrig ? `<span class="price-original">€${item.receipt_price.toFixed(2)}</span>` : ''}
+          <span class="price-final${isDisc ? ' disc' : ''}">€${item.final_price.toFixed(2)}</span>
+        </div>
+      </div>
+      <div class="toggle-row" id="tr-${i}"></div>`;
+    c.appendChild(card);
+
+    const row = card.querySelector(`#tr-${i}`);
+    OPTS.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'toggle-btn' + (assignments[i] === opt.key ? ' sel' : '');
+      btn.textContent = opt.lbl();
+      if (assignments[i] === opt.key) {
+        btn.style.borderColor = opt.col;
+        btn.style.color = opt.col;
+        btn.style.background = opt.col + '14';
+      }
+      btn.addEventListener('click', () => {
+        assignments[i] = assignments[i] === opt.key ? null : opt.key;
+        renderItems(); updateSummary();
+      });
+      row.appendChild(btn);
+    });
+  });
+}
+</script>
+</body>
+</html>

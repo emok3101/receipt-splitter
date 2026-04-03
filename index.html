@@ -346,9 +346,14 @@ Parse this receipt now.`;
       const lineTotal = Math.round((parseFloat(it.line_total) || 0) * 100) / 100;
       const discAmt   = Math.round((parseFloat(it.discount_amount) || 0) * 100) / 100;
       const hasItemDisc = discAmt > 0;
-      const receiptPrice = Math.round((lineTotal + discAmt) * 100) / 100;
+      // Gemini may give line_total as either the full price or post-discount price.
+      // We treat line_total as the FULL (pre-discount) price and always subtract discAmt.
+      const receiptPrice = lineTotal;
+      const postDiscPrice = hasItemDisc
+        ? Math.round((lineTotal - discAmt) * 100) / 100
+        : lineTotal;
       const finalPrice = hasItemDisc
-        ? lineTotal
+        ? postDiscPrice
         : Math.round(lineTotal * (1 - baskDisc) * 100) / 100;
       return {
         name: it.name || 'Item',
